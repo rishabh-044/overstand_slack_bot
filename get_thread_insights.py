@@ -201,19 +201,18 @@ def get_object_types(base_url: str, bearer_token: str, object_type: str) -> List
     # Make the API request
     response = requests.get(api_url, headers=headers)
     
-    # # Check if the request was successful
-    # if not response.ok:
-    #     error_message = f"API request failed with status {response.status_code}"
-    #     try:
-    #         error_details = response.json()
-    #         error_message += f": {error_details}"
-    #     except:
-    #         error_message += f": {response.text}"
+    # Check if the request was successful
+    if not response.ok:
+        error_message = f"API request failed with status {response.status_code}"
+        try:
+            error_details = response.json()
+            error_message += f": {error_details}"
+        except:
+            error_message += f": {response.text}"
         
-    #     raise Exception(error_message)
+        raise Exception(error_message)
     
-    # # Parse and return the JSON response
-    # return response.json().get("objectTypes", [])
+    # Parse and return the JSON response
     return response.json().get("objectTypes", [])
 
 def process_ontology_objects(objects: List[Dict[str, Any]]) -> pd.DataFrame:
@@ -288,10 +287,10 @@ def create_attribute_table(data: List[Dict[str, Any]]) -> pd.DataFrame:
     flattened_data = [flatten_json(item) for item in data]
     
     # Create DataFrame
-    df = pd.DataFrame(flattened_data)
+    insights_df = pd.DataFrame(flattened_data)
     
     # Remove any remaining prefixes from column names
-    df.columns = [col.split('_')[-1] if '_' in col else col for col in df.columns]
+    insights_df.columns = [col.split('_')[-1] if '_' in col else col for col in insights_df.columns]
     
     # Display information about the data
     print(f"\nProcessed {len(data)} objects")
@@ -300,7 +299,7 @@ def create_attribute_table(data: List[Dict[str, Any]]) -> pd.DataFrame:
     for col in df.columns:
         print(f"- {col}")
     
-    return df
+    return insights_df
 
 def get_recent_data(df: pd.DataFrame, timestamp_col: str, last_updated_at: str) -> pd.DataFrame:
     """
@@ -340,7 +339,6 @@ def get_recent_data(df: pd.DataFrame, timestamp_col: str, last_updated_at: str) 
 
 # Example usage
 if __name__ == "__main__":
-    
     foundry_url = os.getenv("FOUNDRY_URL")
     ontology_rid = os.getenv("ONTOLOGY_RID")
     object_type = "ThreadInsight"
