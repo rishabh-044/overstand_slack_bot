@@ -76,7 +76,7 @@ class SlackBot:
         blocks = []
         
         # Extract fields from the insight
-        title = insight.get("deIdentifiedInsightSummary", "Untitled Insight")
+        title = insight.get("insightTitle", "Untitled Insight")
         insight_evidence = insight.get("insightEvidence", "No evidence available")
         sender_role = insight.get("senderRole", "Unknown role")
         org_domain = insight.get("organizationDomain", "Unknown domain")

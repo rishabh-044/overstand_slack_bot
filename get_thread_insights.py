@@ -294,9 +294,9 @@ def create_attribute_table(data: List[Dict[str, Any]]) -> pd.DataFrame:
     
     # Display information about the data
     print(f"\nProcessed {len(data)} objects")
-    print(f"Total columns: {len(df.columns)}")
+    print(f"Total columns: {len(insights_df.columns)}")
     print("\nColumns in the table:")
-    for col in df.columns:
+    for col in insights_df.columns:
         print(f"- {col}")
     
     return insights_df
